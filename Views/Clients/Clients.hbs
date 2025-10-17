@@ -1,0 +1,38 @@
+<head>
+    <title> Список клиентов  </title>
+</head>
+
+<body>
+    <p><a href="/clients/addClient">Новый клиент</a></p>
+    <h1> Список клиентов</h1>
+
+    <table border="1">
+        <tr>
+            <th>ClientID</th>
+            <th>Фамилия</th>
+            <th>Имя</th>
+            <th>Телефон</th>
+            <th>Email</th>
+            <th></th>
+        </tr>
+
+        {{#each Clients}}
+        <tr>
+            <td>{{this.ClientID}}</td>
+            <td>{{this.LastName}}</td>
+            <td>{{this.FirstName}}</td>
+            <td>{{this.Phone}}</td>
+            <td>{{this.Email}}</td>
+
+            <td> <a href="/clients/editClient/{{this.ClientID}}">Edit</a> </td>
+            <td> <a href="/sales/getHistory/{{this.ClientID}}">История</a></td>
+        </tr>
+        {{/each}}
+
+    </table>
+    <br />
+
+    <a href="/tours">К списку туров</a>
+
+</body>
+</html>

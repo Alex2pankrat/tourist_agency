@@ -1,0 +1,42 @@
+<h1>Корзина</h1>
+
+<h1>Оформление заказа</h1>
+
+<h2>Корзина</h2>
+{{#if cartTours.length}}
+<table border="1">
+    <tr>
+        <th>Наимен-ие</th>
+        <th>Цена</th>
+        <th>Кол-во</th>
+    </tr>
+
+    {{#each cartTours}}
+    <tr>
+        <td>{{this.TourName}}</td>
+        <td>{{this.Price}}</td>
+        <td>1</td>
+        {{/each}}
+</table>
+
+--------------------------------------------------------
+<br />
+Всего на {{totalPrice}} рублей
+<br />
+<a href="/tours"> Назад к списку туров </a>
+<br /> <br />
+
+<form action="/sales/cartToHistory" method="POST">
+    <select name="ClientID" id="ClientID">
+        <option value="0">Выберите Клиента:</option>
+        {{#each Clients}}
+           <option value="{{this.ClientID}}">  {{this.FirstName}} {{this.LastName}}</option>
+        {{/each}}
+    </select>
+
+    <button type="submit"> Оплатить заказ </button>
+</form>
+
+{{else}}
+<p>Ваша корзина пуста!</p>
+{{/if}}

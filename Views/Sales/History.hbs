@@ -1,0 +1,25 @@
+<h2>История покупок</h2>
+
+{{#if History.length}}
+<table border="1">
+    <tr>
+        <th>Тур</th>
+        <th>Клиент</th>
+        <th>Дата сделки</th>
+    </tr>
+    {{#each History}}
+    <tr>
+        <td>{{this.TourID}}</td>
+        <td>{{this.ClientID}}</td>
+        <td>{{this.SaleDate}}</td>
+    </tr>
+    {{/each}}
+</table>
+{{else}}
+<p>История покупок пуста.</p>
+{{/if}}
+
+<br />
+
+<a href="/tours">К списку Туров</a> <br />
+<a href="/clients">К списку Клиентов</a>

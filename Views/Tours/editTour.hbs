@@ -1,0 +1,43 @@
+<html>
+
+<head>
+    <title>Редактирование данных тура</title>
+</head>
+
+  <body>
+        <h2>Редактирование данных тура</h2>
+        <form action="/tours/postEditTour" method="POST">
+            <input type="hidden" name="TourID" value="{{tour.TourID}}" />
+
+            <label>Имя</label><br>
+            <input name="TourName" value="{{tour.TourName}}" /><br>
+
+            <label>Description</label><br>
+            <input name="Description" value="{{tour.Description}}" /><br>
+
+            <label>Price</label><br>
+            <input name="Price" type="number"
+               value="{{tour.Price}}" /><br>
+
+            <label>Количество</label><br>
+            <input name="SeatsAvailable" type="number"
+               value="{{tour.SeatsAvailable}}" /><br><br>
+
+            <label>CountryID</label><br>
+            <input name="CountryID" type="number" value="{{tour.CountryID}}" /><br><br>
+
+            <label>TypeID</label><br>
+            <input name="TypeID" type="number" value="{{tour.TypeID}}" /><br><br>
+
+            <label>StartDate</label><br>
+            <input name="StartDate" type="date" value="{{tour.StartDate}}" /><br><br>
+
+            <label>EndDate</label><br>
+            <input name="EndDate" type="date" value="{{tour.EndDate}}" /><br><br>
+
+            <input type="submit" value="Отправить" />
+        </form>
+
+        <a href="/tours">Список туров</a>
+  </body>
+</html>

@@ -1,0 +1,27 @@
+<html>
+
+<head>
+    <title>Ввод данных нового Клиента</title>
+</head>
+
+<body>
+    <h1>Данные нового Клиента</h1>
+    <form action="/clients/postAddClient" method="POST">
+        <label>Фамилия</label><br>
+        <input name="LastName" /><br>
+
+        <label>Имя</label><br>
+        <input name="FirstName" /><br>
+
+        <label>Телефон</label><br>
+        <input name="Phone" /> <br>
+
+        <label>Email</label><br>
+        <input name="Email" /> <br>
+
+        <input type="submit" value="Отправить" />
+    </form>
+
+    <a href="/tours">Все туры</a>
+</body>
+</html>

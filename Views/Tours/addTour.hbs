@@ -1,0 +1,39 @@
+<html>
+
+<head>
+    <title>Ввод данных нового тура</title>
+</head>
+
+<body>
+    <h1>Данные нового тура</h1>
+    <form action="/tours/postAddTour" method="POST">
+        <label>TourName</label><br>
+        <input name="TourName" /><br><br>
+
+        <label>Description</label><br>
+        <input name="Description" /><br><br>
+
+        <label>Price</label><br>
+        <input name="Price" type="number" /><br><br>
+
+        <label>SeatsAvailable</label><br>
+        <input name="SeatsAvailable" type="number" /><br><br>
+
+        <label>CountryID</label><br>
+        <input name="CountryID" type="number" /><br><br>
+
+        <label>TypeID</label><br>
+        <input name="TypeID" type="number" /><br><br>
+
+        <label>StartDate</label><br>
+        <input name="StartDate" type="date" /><br><br>
+
+        <label>EndDate</label><br>
+        <input name="EndDate" type="date" /><br><br>
+
+        <input type="submit" value="Отправить" />
+    </form>
+
+    <a href="/tours">Все туры</a>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<html>
+
+<head>
+    <title> Туристическое агентство  </title>
+</head>
+
+<body>
+    <p><a href="/tours/addTour">Новый тур</a></p>    
+
+    <h1> Список туров</h1>
+
+    <form action="/tours" method="GET">
+        <label for="country-select">Выберите страну:</label>
+        <select name="countryId" id="country-select">
+            <option value="0">Все страны</option>
+            {{#each Countries}}
+            <option value="{{this.CountryID}}">  {{this.CountryName}}</option>
+            {{/each}}
+        </select>
+
+        <label for="type-select">Выберите тип тура:</label>
+        <select name="typeId" id="type-select">
+            <option value="0">Все типы</option>
+            {{#each TourTypes}}
+            <option value="{{this.TypeID}}">  {{this.TypeName}}</option>
+            {{/each}}
+        </select>
+
+        <button type="submit">Фильтровать</button>
+    </form>
+
+    <table border="1">
+        <tr>
+            <th>TourID</th>
+            <th>Наимен-ие</th>
+            <th>Цена</th>
+            <th>Кол-во</th>
+            <th>Edit</th>
+            <th></th>
+            <th></th>
+        </tr>
+
+        {{#each Tours}}
+        <tr>
+            <td>{{this.TourID}}</td>
+            <td>{{this.TourName}}</td>
+            <td>{{this.Price}}</td>
+            <td>{{this.SeatsAvailable}}</td>
+            <td><a href="/tours/editTour/{{this.TourID}}">Edit</a> </td>
+
+            <td> <a href="/sales/addToCart/{{this.TourID}}">В корзину</a></td>
+
+            <td>
+                <form action="/tours/deleteTour/{{this.TourID}}" method="POST">
+                    <button type="submit" onclick="return confirm(
+                'Вы уверены, что хотите удалить этот тур?');">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </table>
+
+    <br />
+    Количество туров в Корзине: {{cartLen}}
+    <br />
+    <a href="/sales/getCart">Оформление продажи</a> <br />
+    <a href="/clients">К списку клиентов</a>
+
+    <p hidden>
+        Выбранная страна:  <label id="curCountry">{{curCountryId}}</label>
+    </p>
+    <p hidden>
+        Выбранный тип:  <label id="curType">{{curTypeId}}</label>
+    </p>
+
+    <script>
+        const countrySelect = document.getElementById("country-select");
+        const lblCountry = document.getElementById("curCountry");
+        countrySelect.selectedIndex = lblCountry.innerText;
+
+        const typeSelect = document.getElementById("type-select");
+        const lblType = document.getElementById("curType");
+        typeSelect.selectedIndex = lblType.innerText;
+    </script>
+
+</body>
+</html>
