@@ -9,6 +9,7 @@
         <th>Наимен-ие</th>
         <th>Цена</th>
         <th>Кол-во</th>
+        <th>Действия</th>
     </tr>
 
     {{#each cartTours}}
@@ -16,10 +17,17 @@
         <td>{{this.TourName}}</td>
         <td>{{this.Price}}</td>
         <td>1</td>
-        {{/each}}
+        <td>
+            <form action="/sales/removeFromCart/{{this.TourID}}" method="POST" style="display:inline;">
+                <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить этот тур из корзины?');">
+                    Удалить
+                </button>
+            </form>
+        </td>
+    </tr>
+    {{/each}}
 </table>
 
---------------------------------------------------------
 <br />
 Всего на {{totalPrice}} рублей
 <br />

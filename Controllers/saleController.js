@@ -29,18 +29,47 @@ exports.addToCart = function (req, res) {
 // Просмотр содержимого Корзины
 //=============================================
 exports.getCart = function (req, res) {
-    const validCart = connectController.cart.filter(item => item && typeof item.Price !== 'undefined');
-    const totalPrice = validCart.reduce((total, tour) => total + tour.Price, 0);
+    console.log("=== Начало getCart ===");
+    console.log("Содержимое корзины:", connectController.cart);
+    
+    // Исправленный расчет суммы
+    const totalPrice = connectController.cart.reduce((total, tour) => {
+        console.log("Добавляем цену:", tour.Price, "к общей сумме:", total);
+        return total + (parseFloat(tour.Price) || 0);
+    }, 0);
+    
+    console.log("Общая сумма:", totalPrice);
 
     pool.query("SELECT * FROM clients", function (err, clients) {
-        if (err) return console.log(err);
+        console.log("Результат запроса клиентов:", { err, clients });
+        
+        if (err) {
+            console.log("Ошибка БД при запросе клиентов:", err);
+            return console.log(err);
+        }
 
         res.render("../Views/Sales/Cart.hbs", {
-            cartTours: validCart,
+            cartTours: connectController.cart,
             totalPrice: totalPrice,
             Clients: clients
         });
+        console.log("=== Конец getCart ===");
     });
+};
+
+
+//=========================================================
+// Удаление тура из Корзины
+//=========================================================
+exports.removeFromCart = function (req, res) {
+    const TourID = req.params.TourID;
+    
+    if (TourID) {
+        // Удаляем тур из корзины по ID
+        connectController.cart = connectController.cart.filter(item => item.TourID !== parseInt(TourID));
+    }
+    
+    res.redirect("/sales/getCart");
 };
 
 //-----------------------------------------------
