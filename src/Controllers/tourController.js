@@ -1,16 +1,10 @@
 const connectController = require("../Controllers/connectController.js");
 const pool = connectController.pool;
 
-console.log("Imported pool object in tourController:", pool);
-
-//==============================================
-// Чтение таблицы Tours
-//==============================================
 exports.getTours = function (req, res) {
-    // Основа SQL-запроса для таблицы Tours
     let query = "SELECT * FROM tours";
-    let filters = []; // Условие фильтрации
-    let params = [];  // Параметры SQL-запроса
+    let filters = [];
+    let params = [];
 
     let countryId = req.query.countryId;
     let typeId = req.query.typeId;
@@ -41,31 +35,22 @@ exports.getTours = function (req, res) {
             pool.query("SELECT * FROM tourtypes", function (err, tourtypes) {
                 if (err) return console.log(err);
 
-                cartLen = connectController.cart.length;
                 res.render("../Views/Tours/Tours.hbs", {
                     Tours: tours,
                     Countries: countries,
                     TourTypes: tourtypes,
                     curCountryId: countryId,
-                    curTypeId: typeId,
-                    cartLen: cartLen
+                    curTypeId: typeId
                 });
             });
         });
     });
 };
 
-
-//=============================================
-// Добавление Нового тура
-//=============================================
 exports.addTour = function (req, res) {
     res.render("../Views/Tours/addTour.hbs");
 };
 
-//-----------------------------------------------
-// Вызывается при нажатии на кнопку Отправить
-//-----------------------------------------------
 exports.postAddTour = function (req, res) {
     if (!req.body) return res.sendStatus(400);
 
@@ -78,7 +63,6 @@ exports.postAddTour = function (req, res) {
     const EndDate = req.body.EndDate;
     const Description = req.body.Description;
 
-
     pool.query("INSERT INTO tours (TourName, Price, SeatsAvailable, CountryID, TypeID, StartDate, EndDate, Description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
         [TourName, Price, SeatsAvailable, CountryID, TypeID, StartDate, EndDate, Description], function (err, data) {
             if (err) return console.log(err);
@@ -87,9 +71,6 @@ exports.postAddTour = function (req, res) {
  
 };
 
-//=========================================
-// Редактирование записи
-//=========================================
 exports.editTour = function (req, res) {
     const TourID = req.params.TourID;
     pool.query("SELECT * FROM tours WHERE TourID=?", [TourID], function (err, tours) {
@@ -101,10 +82,6 @@ exports.editTour = function (req, res) {
     });
 };
 
-
-//-----------------------------------------------
-// Вызывается при нажатии на кнопку Отправить
-//-----------------------------------------------
 exports.postEditTour = function (req, res) {
     if (!req.body) return res.sendStatus(400);
 
@@ -120,10 +97,6 @@ exports.postEditTour = function (req, res) {
         });
 };
 
-
-//===========================================
-// Удаление записи
-//===========================================
 exports.deleteTour = function (req, res) {
     const TourID = req.params.TourID;
     pool.query("DELETE FROM tours WHERE TourID=?", [TourID], function (err, data) {

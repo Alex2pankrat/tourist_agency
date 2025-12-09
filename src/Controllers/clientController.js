@@ -11,17 +11,10 @@ exports.getClients = function (req, res) {
     });
 };
 
-
-//=============================================
-// Добавление Нового клиента
-//=============================================
 exports.addClient = function (req, res) {
     res.render("../Views/Clients/addClient.hbs");
 };
 
-//-----------------------------------------------
-// Вызывается при нажатии на кнопку Отправить
-//-----------------------------------------------
 exports.postAddClient = function (req, res) {
     if (!req.body) return res.sendStatus(400);
 
@@ -38,9 +31,6 @@ exports.postAddClient = function (req, res) {
         });
 };
 
-//=========================================
-// Редактирование записи
-//=========================================
 exports.editClient = function (req, res) {
     const ClientID = req.params.ClientID;
     pool.query("SELECT * FROM clients WHERE ClientID=?", [ClientID], function (err, clients) {
@@ -52,10 +42,6 @@ exports.editClient = function (req, res) {
     });
 };
 
-
-//-----------------------------------------------
-// Вызывается при нажатии на кнопку Отправить
-//-----------------------------------------------
 exports.postEditClient = function (req, res) {
     if (!req.body) return res.sendStatus(400);
 
