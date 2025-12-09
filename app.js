@@ -13,10 +13,10 @@ const urlencodedParser = express.urlencoded({ extended: false });
 //======================================================
 // Определение корневых маршрутов приложения
 //======================================================
-const homeRouter = require("./routes/homeRouter.js");
-const tourRouter = require("./routes/tourRouter.js");
-const clientRouter = require("./routes/clientRouter.js");
-const saleRouter = require("./routes/saleRouter.js");
+const homeRouter = require("./Routes/homeRouter.js");
+const tourRouter = require("./Routes/tourRouter.js");
+const clientRouter = require("./Routes/clientRouter.js");
+const saleRouter = require("./Routes/saleRouter.js");
 
 app.use("/tours", urlencodedParser, tourRouter);
 app.use("/clients", urlencodedParser, clientRouter);

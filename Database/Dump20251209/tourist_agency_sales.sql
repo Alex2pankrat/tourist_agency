@@ -1,0 +1,63 @@
+-- MySQL dump 10.13  Distrib 8.0.43, for Win64 (x86_64)
+--
+-- Host: 127.0.0.1    Database: tourist_agency
+-- ------------------------------------------------------
+-- Server version	8.0.43
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `sales`
+--
+
+DROP TABLE IF EXISTS `sales`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sales` (
+  `SaleID` int NOT NULL AUTO_INCREMENT,
+  `ClientID` int NOT NULL,
+  `TourID` int NOT NULL,
+  `SaleDate` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `FinalPrice` decimal(10,2) NOT NULL,
+  `TravelersCount` int NOT NULL DEFAULT '1',
+  `Status` enum('pending','confirmed','cancelled') DEFAULT 'confirmed',
+  `Notes` text,
+  `CreatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`SaleID`),
+  KEY `idx_sale_date` (`SaleDate`),
+  KEY `idx_client_sales` (`ClientID`),
+  KEY `idx_tour_sales` (`TourID`),
+  CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`ClientID`) REFERENCES `clients` (`ClientID`) ON DELETE RESTRICT,
+  CONSTRAINT `sales_ibfk_2` FOREIGN KEY (`TourID`) REFERENCES `tours` (`TourID`) ON DELETE RESTRICT
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sales`
+--
+
+LOCK TABLES `sales` WRITE;
+/*!40000 ALTER TABLE `sales` DISABLE KEYS */;
+INSERT INTO `sales` VALUES (1,1,1,'2025-09-29 16:06:10',85000.00,2,'confirmed',NULL,'2025-09-29 16:06:10'),(2,2,3,'2025-09-29 16:06:10',112000.00,1,'confirmed',NULL,'2025-09-29 16:06:10'),(3,3,2,'2025-09-29 16:06:10',92000.00,2,'confirmed',NULL,'2025-09-29 16:06:10'),(4,5,1,'2025-11-06 08:06:36',85000.00,1,'confirmed',NULL,'2025-11-06 11:06:36'),(5,4,1,'2025-11-06 08:11:40',85000.00,1,'confirmed',NULL,'2025-11-06 11:11:40'),(6,5,1,'2025-11-06 08:12:47',85000.00,1,'confirmed',NULL,'2025-11-06 11:12:47'),(7,5,2,'2025-11-06 08:12:47',92000.00,1,'confirmed',NULL,'2025-11-06 11:12:47'),(8,5,5,'2025-11-06 08:12:47',76000.00,1,'confirmed',NULL,'2025-11-06 11:12:47'),(9,5,4,'2025-11-06 08:12:47',98000.00,1,'confirmed',NULL,'2025-11-06 11:12:47'),(10,5,3,'2025-11-06 08:12:47',112000.00,1,'confirmed',NULL,'2025-11-06 11:12:47'),(11,5,1,'2025-11-12 13:25:26',85000.00,1,'confirmed',NULL,'2025-11-12 16:25:26'),(12,5,2,'2025-11-12 13:25:26',92000.00,1,'confirmed',NULL,'2025-11-12 16:25:26'),(13,5,5,'2025-11-12 13:25:50',76000.00,1,'confirmed',NULL,'2025-11-12 16:25:50'),(14,5,5,'2025-11-20 10:25:06',76000.00,1,'confirmed',NULL,'2025-11-20 13:25:06'),(15,5,1,'2025-11-20 10:25:06',85000.00,1,'confirmed',NULL,'2025-11-20 13:25:06');
+/*!40000 ALTER TABLE `sales` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-12-09 22:57:48
