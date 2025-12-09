@@ -1,14 +1,10 @@
 const connectController = require("../Controllers/connectController.js");
 const pool = connectController.pool;
 
-//========================================
-// Чтение таблицы Clients
-//========================================
 exports.getClients = function (req, res) {
     pool.query("SELECT * FROM clients", function (err, clients) {
         if (err) return console.log(err);
 
-        // Передача данных на представление
         res.render("../Views/Clients/Clients.hbs", {
             Clients: clients
         });

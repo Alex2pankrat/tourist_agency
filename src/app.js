@@ -1,18 +1,11 @@
 require('dotenv').config();
 
-//===================================================
-// Настройка express
-//===================================================
 const express = require("express");
 const app = express();
 
-// Включение Парсера
 app.set("view engine", "hbs");
 const urlencodedParser = express.urlencoded({ extended: false });
 
-//======================================================
-// Определение корневых маршрутов приложения
-//======================================================
 const homeRouter = require("./Routes/homeRouter.js");
 const tourRouter = require("./Routes/tourRouter.js");
 const clientRouter = require("./Routes/clientRouter.js");
@@ -23,7 +16,6 @@ app.use("/clients", urlencodedParser, clientRouter);
 app.use("/sales", urlencodedParser, saleRouter);
 app.use("/", homeRouter);
 
-//========================================================
 app.use(function (req, res, next) {
     res.status(404).send("Not Found")
 });
