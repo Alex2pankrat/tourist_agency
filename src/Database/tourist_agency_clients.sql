@@ -36,7 +36,7 @@ CREATE TABLE `clients` (
   UNIQUE KEY `Email` (`Email`),
   KEY `idx_last_name` (`LastName`),
   KEY `idx_email` (`Email`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

@@ -28,7 +28,7 @@ CREATE TABLE `countries` (
   `CreatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`CountryID`),
   UNIQUE KEY `CountryName` (`CountryName`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
