@@ -1,13 +1,13 @@
 <html>
 
 <head>
-    <title> Туристическое агентство  </title>
+    <title>Туристическое агентство</title>
 </head>
 
 <body>
     <p><a href="/tours/addTour">Новый тур</a></p>    
 
-    <h1> Список туров</h1>
+    <h1>Список туров</h1>
 
     <form action="/tours" method="GET">
         <label for="country-select">Выберите страну:</label>
@@ -69,10 +69,10 @@
     <a href="/clients">К списку клиентов</a>
 
     <p hidden>
-        Выбранная страна:  <label id="curCountry">{{curCountryId}}</label>
+        Выбранная страна: <label id="curCountry">{{curCountryId}}</label>
     </p>
     <p hidden>
-        Выбранный тип:  <label id="curType">{{curTypeId}}</label>
+        Выбранный тип: <label id="curType">{{curTypeId}}</label>
     </p>
 
     <script>
@@ -84,6 +84,6 @@
         const lblType = document.getElementById("curType");
         typeSelect.selectedIndex = lblType.innerText;
     </script>
-
 </body>
+
 </html>

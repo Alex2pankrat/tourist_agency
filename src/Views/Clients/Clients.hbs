@@ -1,10 +1,10 @@
 <head>
-    <title> Список клиентов  </title>
+    <title>Список клиентов</title>
 </head>
 
 <body>
     <p><a href="/clients/addClient">Новый клиент</a></p>
-    <h1> Список клиентов</h1>
+    <h1>Список клиентов</h1>
 
     <table border="1">
         <tr>
@@ -24,7 +24,7 @@
             <td>{{this.Phone}}</td>
             <td>{{this.Email}}</td>
 
-            <td> <a href="/clients/editClient/{{this.ClientID}}">Edit</a> </td>
+            <td> <a href="/clients/editClient/{{this.ClientID}}">Редактировать</a> </td>
             <td> <a href="/sales/getHistory/{{this.ClientID}}">История</a></td>
         </tr>
         {{/each}}
