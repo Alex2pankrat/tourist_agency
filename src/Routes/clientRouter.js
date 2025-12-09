@@ -1,6 +1,5 @@
 const express = require("express");
 const clientController = require("../Controllers/clientController.js");
-
 const clientRouter = express.Router();
 
 clientRouter.use("/addClient", clientController.addClient);
