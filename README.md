@@ -1,5 +1,11 @@
-##### Tourist Agency Web App
+# Tourist Agency Web App
 
-## js
-## mysql
-## handelbars
+### The simple application for DB subject
+
+---
+
+### Stack:
+* html/css
+* js
+* mysql
+* handlebars
