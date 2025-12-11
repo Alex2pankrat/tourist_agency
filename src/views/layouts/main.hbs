@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}} - Турагентство</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <h1>Турагентство "Путешествие"</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/" class="{{#if_eq title 'Главная'}}active{{/if_eq}}">Главная</a></li>
+                <li><a href="/clients" class="{{#if_eq title 'Клиенты'}}active{{/if_eq}}">Клиенты</a></li>
+                <li><a href="/countries" class="{{#if_eq title 'Страны'}}active{{/if_eq}}">Страны</a></li>
+                <li><a href="/tours" class="{{#if_eq title 'Туры'}}active{{/if_eq}}">Туры</a></li>
+                <li><a href="/sales" class="{{#if_eq title 'Продажи'}}active{{/if_eq}}">Продажи</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        {{#if message}}
+        <div class="alert {{message.type}}">
+            {{message.text}}
+        </div>
+        {{/if}}
+        
+        {{{body}}}
+    </main>
+
+    <footer>
+        <p>Турагентство "Путешествие" &copy; 2025</p>
+        <p>Система управления турами v1.0</p>
+    </footer>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>

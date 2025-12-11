@@ -1,0 +1,290 @@
+<div class="crud-section">
+    <div class="section-header">
+        <h2>Управление продажами</h2>
+        <div class="header-actions">
+            <button onclick="showAddForm()" class="btn btn-primary">💰 Новая продажа</button>
+        </div>
+    </div>
+
+    <!-- Форма добавления -->
+    <div id="addForm" class="form-section" style="display: none;">
+        <h3>Оформление новой продажи</h3>
+        <form method="POST" action="/sales">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="clientID">Клиент *</label>
+                    <select id="clientID" name="clientID" required>
+                        <option value="">Выберите клиента</option>
+                        {{#each clients}}
+                        <option value="{{this.ID}}">{{this.FirstName}} {{this.LastName}} ({{this.Email}})</option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="tourID">Тур *</label>
+                    <select id="tourID" name="tourID" required onchange="updateTourInfo()">
+                        <option value="">Выберите тур</option>
+                        {{#each tours}}
+                        <option value="{{this.ID}}" data-price="{{this.price}}" data-seats="{{this.seatsAvailable}}">
+                            {{this.Name}} - {{this.price}} ₽ (мест: {{this.seatsAvailable}})
+                        </option>
+                        {{/each}}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="seats">Количество мест *</label>
+                    <input type="number" id="seats" name="seats" min="1" required oninput="calculateTotal()">
+                </div>
+                <div class="form-group">
+                    <label for="status">Статус</label>
+                    <select id="status" name="status">
+                        <option value="pending">⏳ В обработке</option>
+                        <option value="confirmed">✅ Подтверждено</option>
+                        <option value="completed">🏁 Завершено</option>
+                        <option value="cancelled">❌ Отменено</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Информация о туре -->
+            <div id="tourInfo" class="tour-info" style="display: none;">
+                <h4>Информация о туре</h4>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <strong>Доступно мест:</strong> <span id="availableSeats">0</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Цена за место:</strong> <span id="tourPrice">0</span> ₽
+                    </div>
+                    <div class="info-item">
+                        <strong>Общая стоимость:</strong> <span id="totalCost">0</span> ₽
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">💳 Оформить продажу</button>
+                <button type="button" class="btn btn-secondary" onclick="hideAddForm()">Отмена</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Список продаж -->
+    <div class="data-section">
+        <h3>История продаж</h3>
+        {{#if sales.length}}
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Клиент</th>
+                        <th>Тур</th>
+                        <th>Места</th>
+                        <th>Стоимость</th>
+                        <th>Статус</th>
+                        <th>Дата</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each sales}}
+                    <tr>
+                        <td>#{{this.ID}}</td>
+                        <td>
+                            <div class="client-info">
+                                <strong>{{this.FirstName}} {{this.LastName}}</strong>
+                                <br>
+                                <small>{{this.Email}}</small>
+                            </div>
+                        </td>
+                        <td>{{this.TourName}}</td>
+                        <td class="text-center">{{this.seats}}</td>
+                        <td>{{multiply this.price this.seats}} ₽</td>
+                        <td>
+                            <span class="status-badge status-{{this.status}}">
+                                {{#if_eq this.status 'pending'}}⏳{{/if_eq}}
+                                {{#if_eq this.status 'confirmed'}}✅{{/if_eq}}
+                                {{#if_eq this.status 'completed'}}🏁{{/if_eq}}
+                                {{#if_eq this.status 'cancelled'}}❌{{/if_eq}}
+                                {{this.status}}
+                            </span>
+                        </td>
+                        <td>{{formatDate this.CreatedAt}}</td>
+                        <td class="actions">
+                            <form method="POST" action="/sales/{{this.ID}}/status" class="inline-form">
+                                <select name="status" onchange="this.form.submit()" class="status-select">
+                                    <option value="pending" {{#if_eq this.status 'pending'}}selected{{/if_eq}}>⏳ В обработке</option>
+                                    <option value="confirmed" {{#if_eq this.status 'confirmed'}}selected{{/if_eq}}>✅ Подтверждено</option>
+                                    <option value="completed" {{#if_eq this.status 'completed'}}selected{{/if_eq}}>🏁 Завершено</option>
+                                    <option value="cancelled" {{#if_eq this.status 'cancelled'}}selected{{/if_eq}}>❌ Отменено</option>
+                                </select>
+                            </form>
+                            <form method="POST" action="/sales/{{this.ID}}/delete" class="inline-form">
+                                <button type="submit" class="btn btn-sm btn-danger" 
+                                        onclick="return confirm('Удалить продажу #{{this.ID}}?')">
+                                    Удалить
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4" style="text-align: right; font-weight: bold;">Итого:</td>
+                        <td style="font-weight: bold;">{{calculateTotal sales}} ₽</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        {{else}}
+        <div class="empty-state">
+            <p>Продаж пока нет</p>
+        </div>
+        {{/if}}
+    </div>
+</div>
+
+<script>
+let selectedTourPrice = 0;
+let selectedTourSeats = 0;
+
+function showAddForm() {
+    document.getElementById('addForm').style.display = 'block';
+    window.scrollTo({ top: document.getElementById('addForm').offsetTop - 100, behavior: 'smooth' });
+}
+
+function hideAddForm() {
+    document.getElementById('addForm').style.display = 'none';
+    document.querySelector('#addForm form').reset();
+    document.getElementById('tourInfo').style.display = 'none';
+}
+
+function updateTourInfo() {
+    const tourSelect = document.getElementById('tourID');
+    const selectedOption = tourSelect.options[tourSelect.selectedIndex];
+    
+    if (selectedOption.value) {
+        selectedTourPrice = parseFloat(selectedOption.dataset.price);
+        selectedTourSeats = parseInt(selectedOption.dataset.seats);
+        
+        document.getElementById('availableSeats').textContent = selectedTourSeats;
+        document.getElementById('tourPrice').textContent = selectedTourPrice.toLocaleString();
+        document.getElementById('tourInfo').style.display = 'block';
+        
+        calculateTotal();
+    } else {
+        document.getElementById('tourInfo').style.display = 'none';
+    }
+}
+
+function calculateTotal() {
+    const seats = parseInt(document.getElementById('seats').value) || 0;
+    const total = seats * selectedTourPrice;
+    
+    document.getElementById('totalCost').textContent = total.toLocaleString();
+    
+    // Валидация количества мест
+    const seatsInput = document.getElementById('seats');
+    if (seats > selectedTourSeats) {
+        seatsInput.setCustomValidity(`Недостаточно мест. Доступно: ${selectedTourSeats}`);
+    } else {
+        seatsInput.setCustomValidity('');
+    }
+}
+
+// Хелпер для Handlebars (добавить в server.js)
+Handlebars.registerHelper('multiply', function(price, seats) {
+    return (price * seats).toLocaleString();
+});
+
+Handlebars.registerHelper('calculateTotal', function(sales) {
+    let total = 0;
+    sales.forEach(sale => {
+        total += sale.price * sale.seats;
+    });
+    return total.toLocaleString();
+});
+</script>
+
+<style>
+.tour-info {
+    background: #e8f4fd;
+    border: 1px solid #b6e0fe;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: bold;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.status-confirmed {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-completed {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.status-cancelled {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.client-info {
+    line-height: 1.4;
+}
+
+.client-info small {
+    color: #6c757d;
+    font-size: 0.85rem;
+}
+
+.status-select {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+    background: white;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.status-select:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+}
+
+table tfoot {
+    background: #f8f9fa;
+    font-weight: bold;
+}
+
+table tfoot td {
+    padding: 1rem;
+    border-top: 2px solid #dee2e6;
+}
+
+.text-center {
+    text-align: center;
+}
+</style>

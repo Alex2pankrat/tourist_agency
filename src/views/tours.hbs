@@ -1,0 +1,252 @@
+<div class="crud-section">
+    <div class="section-header">
+        <h2>Управление турами</h2>
+        <div class="header-actions">
+            <button onclick="showAddForm()" class="btn btn-primary">➕ Добавить тур</button>
+        </div>
+    </div>
+
+    <!-- Форма добавления -->
+    <div id="addForm" class="form-section" style="display: none;">
+        <h3>Добавить новый тур</h3>
+        <form method="POST" action="/tours">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="Name">Название тура *</label>
+                    <input type="text" id="Name" name="Name" required placeholder="Название тура">
+                </div>
+                <div class="form-group">
+                    <label for="tourType">Тип тура *</label>
+                    <select id="tourType" name="tourType" required>
+                        <option value="">Выберите тип</option>
+                        <option value="1">🏖️ Пляжный</option>
+                        <option value="2">⛰️ Горный</option>
+                        <option value="3">🩺 Лечебный</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="price">Цена (₽) *</label>
+                    <input type="number" id="price" name="price" step="0.01" min="0" required placeholder="0.00">
+                </div>
+                <div class="form-group">
+                    <label for="seatsAvailable">Доступно мест *</label>
+                    <input type="number" id="seatsAvailable" name="seatsAvailable" min="1" required placeholder="10">
+                </div>
+                <div class="form-group full-width">
+                    <label for="description">Описание *</label>
+                    <textarea id="description" name="description" rows="4" required placeholder="Подробное описание тура..."></textarea>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">Сохранить тур</button>
+                <button type="button" class="btn btn-secondary" onclick="hideAddForm()">Отмена</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Список туров -->
+    <div class="data-section">
+        <h3>Каталог туров</h3>
+        {{#if tours.length}}
+        <div class="tours-grid">
+            {{#each tours}}
+            <div class="tour-card">
+                <div class="tour-header">
+                    <span class="tour-type type-{{this.tourType}}">
+                        {{#if_eq this.tourType 1}}🏖️ Пляжный{{/if_eq}}
+                        {{#if_eq this.tourType 2}}⛰️ Горный{{/if_eq}}
+                        {{#if_eq this.tourType 3}}🩺 Лечебный{{/if_eq}}
+                    </span>
+                    <span class="tour-id">#{{this.ID}}</span>
+                </div>
+                <div class="tour-body">
+                    <h4>{{this.Name}}</h4>
+                    <p class="tour-description">{{this.description}}</p>
+                    <div class="tour-details">
+                        <div class="detail">
+                            <span class="label">Цена:</span>
+                            <span class="value price">{{this.price}} ₽</span>
+                        </div>
+                        <div class="detail">
+                            <span class="label">Места:</span>
+                            <span class="value seats">{{this.seatsAvailable}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="tour-footer">
+                    <div class="tour-actions">
+                        <form method="POST" action="/tours/{{this.ID}}/delete" class="inline-form">
+                            <button type="submit" class="btn btn-sm btn-danger" 
+                                    onclick="return confirm('Удалить тур \"{{this.Name}}\"?')">
+                                Удалить
+                            </button>
+                        </form>
+                    </div>
+                    <div class="tour-date">
+                        {{formatDate this.CreatedAt}}
+                    </div>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <div class="empty-state">
+            <p>Туров пока нет</p>
+        </div>
+        {{/if}}
+    </div>
+</div>
+
+<script>
+function showAddForm() {
+    document.getElementById('addForm').style.display = 'block';
+    window.scrollTo({ top: document.getElementById('addForm').offsetTop - 100, behavior: 'smooth' });
+}
+
+function hideAddForm() {
+    document.getElementById('addForm').style.display = 'none';
+    document.querySelector('#addForm form').reset();
+}
+</script>
+
+<style>
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.tours-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.tour-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid #e9ecef;
+}
+
+.tour-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+}
+
+.tour-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1rem 0.5rem;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.tour-type {
+    font-weight: bold;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.type-1 { background: #ffeaa7; color: #d35400; }
+.type-2 { background: #dfe6e9; color: #2c3e50; }
+.type-3 { background: #a3e4d7; color: #0d6251; }
+
+.tour-id {
+    font-size: 0.8rem;
+    color: #6c757d;
+    font-family: monospace;
+}
+
+.tour-body {
+    padding: 1rem;
+}
+
+.tour-body h4 {
+    margin: 0 0 0.75rem 0;
+    color: #2c3e50;
+    font-size: 1.2rem;
+}
+
+.tour-description {
+    color: #495057;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.tour-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.detail {
+    display: flex;
+    flex-direction: column;
+}
+
+.label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}
+
+.value {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.price {
+    color: #27ae60;
+}
+
+.seats {
+    color: #3498db;
+}
+
+.tour-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+.tour-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tour-date {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    background-color: white;
+}
+
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    resize: vertical;
+    min-height: 100px;
+}
+</style>

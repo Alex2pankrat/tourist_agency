@@ -1,0 +1,218 @@
+<div class="crud-section">
+    <div class="section-header">
+        <h2>Управление странами</h2>
+        <div class="header-actions">
+            <button onclick="showAddForm()" class="btn btn-primary">🌍 Добавить страну</button>
+        </div>
+    </div>
+
+    <!-- Форма добавления -->
+    <div id="addForm" class="form-section" style="display: none;">
+        <h3>Добавить новую страну</h3>
+        <form method="POST" action="/countries">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="Name">Название страны *</label>
+                    <input type="text" id="Name" name="Name" required placeholder="Название страны">
+                </div>
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="Visa" name="Visa">
+                        <span class="checkbox-custom"></span>
+                        Требуется виза
+                    </label>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">Сохранить страну</button>
+                <button type="button" class="btn btn-secondary" onclick="hideAddForm()">Отмена</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Список стран -->
+    <div class="data-section">
+        <h3>Список стран</h3>
+        {{#if countries.length}}
+        <div class="countries-grid">
+            {{#each countries}}
+            <div class="country-card">
+                <div class="country-flag">
+                    {{getFlagEmoji this.Name}}
+                </div>
+                <div class="country-info">
+                    <h4>{{this.Name}}</h4>
+                    <div class="country-details">
+                        <span class="visa-status {{#if this.Visa}}visa-required{{else}}visa-free{{/if}}">
+                            {{#if this.Visa}}🛂 Виза требуется{{else}}✅ Без визы{{/if}}
+                        </span>
+                        <span class="country-date">Добавлено: {{formatDate this.CreatedAt}}</span>
+                    </div>
+                </div>
+                <div class="country-actions">
+                    <form method="POST" action="/countries/{{this.ID}}/delete" class="inline-form">
+                        <button type="submit" class="btn btn-sm btn-danger" 
+                                onclick="return confirm('Удалить страну \"{{this.Name}}\"?')">
+                            Удалить
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {{/each}}
+        </div>
+        {{else}}
+        <div class="empty-state">
+            <p>Стран пока нет</p>
+        </div>
+        {{/if}}
+    </div>
+</div>
+
+<script>
+function showAddForm() {
+    document.getElementById('addForm').style.display = 'block';
+    window.scrollTo({ top: document.getElementById('addForm').offsetTop - 100, behavior: 'smooth' });
+}
+
+function hideAddForm() {
+    document.getElementById('addForm').style.display = 'none';
+    document.querySelector('#addForm form').reset();
+}
+
+// Хелпер для флагов (добавить в server.js)
+Handlebars.registerHelper('getFlagEmoji', function(countryName) {
+    const flagEmojis = {
+        'Россия': '🇷🇺',
+        'Турция': '🇹🇷',
+        'Таиланд': '🇹🇭',
+        'Египет': '🇪🇬',
+        'Испания': '🇪🇸',
+        'Италия': '🇮🇹',
+        'Франция': '🇫🇷',
+        'Германия': '🇩🇪',
+        'Греция': '🇬🇷',
+        'Китай': '🇨🇳',
+        'Япония': '🇯🇵',
+        'США': '🇺🇸',
+        'Канада': '🇨🇦',
+        'Австралия': '🇦🇺',
+        'Бразилия': '🇧🇷',
+        'Мексика': '🇲🇽',
+        'Индия': '🇮🇳',
+        // Добавьте больше стран по необходимости
+    };
+    
+    return flagEmojis[countryName] || '🌍';
+});
+</script>
+
+<style>
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox-custom {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 2px solid #ced4da;
+    border-radius: 4px;
+    margin-right: 10px;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
+    background: #3498db;
+    border-color: #3498db;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+}
+
+.countries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.country-card {
+    align-items: center;
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border: 1px solid #e9ecef;
+    transition: transform 0.2s;
+}
+
+.country-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.country-flag {
+    font-size: 2rem;
+    margin-right: 1rem;
+    min-width: 50px;
+    text-align: center;
+}
+
+.country-info {
+    flex: 1;
+}
+
+.country-info h4 {
+    margin: 0 0 0.5rem 0;
+    color: #2c3e50;
+}
+
+.country-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.visa-status {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.visa-required {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.visa-free {
+    background: #d4edda;
+    color: #155724;
+}
+
+.country-date {
+    font-size: 0.8rem;
+    color: #6c757d;
+}
+
+.country-actions {
+    margin-left: 1rem;
+}
+</style>

@@ -1,0 +1,41 @@
+<div class="crud-section">
+    <h2>Редактирование клиента #{{client.ID}}</h2>
+    
+    <form method="POST" action="/clients/{{client.ID}}/update"> <!-- Вот эта строка! -->
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="FirstName">Имя *</label>
+                <input type="text" id="FirstName" name="FirstName" value="{{client.FirstName}}" required>
+            </div>
+            <div class="form-group">
+                <label for="LastName">Фамилия *</label>
+                <input type="text" id="LastName" name="LastName" value="{{client.LastName}}" required>
+            </div>
+            <div class="form-group">
+                <label for="Phone">Телефон *</label>
+                <input type="tel" id="Phone" name="Phone" value="{{client.Phone}}" required>
+            </div>
+            <div class="form-group">
+                <label for="Email">Email *</label>
+                <input type="email" id="Email" name="Email" value="{{client.Email}}" required>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">💾 Сохранить изменения</button>
+            <a href="/clients" class="btn btn-secondary">← Назад к списку</a>
+        </div>
+    </form>
+    
+    <div class="client-info mt-3">
+        <h4>Дополнительная информация</h4>
+        <div class="info-grid">
+            <div class="info-item">
+                <strong>ID клиента:</strong> {{client.ID}}
+            </div>
+            <div class="info-item">
+                <strong>Дата регистрации:</strong> {{formatDate client.CreatedAt}}
+            </div>
+        </div>
+    </div>
+</div>
