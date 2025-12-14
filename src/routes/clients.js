@@ -41,7 +41,6 @@ router.post('/:id/delete', async (req, res) => {
     }
 });
 
-// Форма редактирования клиента - ИСПРАВЛЕНО!
 router.get('/:id/edit', async (req, res) => {
     try {
         const clientId = req.params.id;

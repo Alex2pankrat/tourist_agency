@@ -1,0 +1,126 @@
+<div class="crud-section">
+    <h2>Редактирование страны</h2>
+    
+    <form method="POST" action="/countries/{{country.ID}}/update">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="Name">Название страны *</label>
+                <input type="text" id="Name" name="Name" value="{{country.Name}}" required 
+                       placeholder="Название страны">
+            </div>
+            
+            <div class="form-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="Visa" name="Visa" 
+                           {{#if country.Visa}}checked{{/if}}>
+                    <span class="checkbox-custom"></span>
+                    Требуется виза
+                </label>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">💾 Сохранить изменения</button>
+            <a href="/countries" class="btn btn-secondary">← Назад к списку</a>
+        </div>
+    </form>
+    
+    <div class="country-info mt-3">
+        <h4>Информация о стране</h4>
+        <div class="info-grid">
+            <div class="info-item">
+                <strong>ID страны:</strong> {{country.ID}}
+            </div>
+            <div class="info-item">
+                <strong>Флаг:</strong> {{getFlagEmoji country.Name}}
+            </div>
+            <div class="info-item">
+                <strong>Дата добавления:</strong> {{formatDate country.CreatedAt}}
+            </div>
+            <div class="info-item">
+                <strong>Виза требуется:</strong> 
+                {{#if country.Visa}}Да{{else}}Нет{{/if}}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.country-info {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+    margin-top: 2rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.info-item {
+    padding: 0.75rem;
+    background: white;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+}
+
+.info-item strong {
+    color: #495057;
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    padding: 1rem;
+    background: white;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    transition: all 0.2s;
+}
+
+.checkbox-label:hover {
+    border-color: #3498db;
+    background: #f8f9fa;
+}
+
+.checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.checkbox-custom {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border: 2px solid #ced4da;
+    border-radius: 4px;
+    margin-right: 10px;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom {
+    background: #3498db;
+    border-color: #3498db;
+}
+
+.checkbox-label input[type="checkbox"]:checked + .checkbox-custom::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-weight: bold;
+}
+</style>
