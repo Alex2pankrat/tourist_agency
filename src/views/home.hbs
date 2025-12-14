@@ -21,9 +21,9 @@
         </div>
         
         <div class="stat-card">
-            <h3>Выручка</h3>
-            <div class="stat-value">{{formatNumber stats.revenue}} ₽</div>
-            <span>Завершенные туры</span>
+            <h3>Страны</h3>
+            <div class="stat-value">{{stats.countries}}</div>
+            <a href="/countries" class="stat-link">Управление →</a>
         </div>
     </div>
 </div>
@@ -43,21 +43,31 @@
     .stat-card {
         background: white;
         padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+        border: 1px solid #e9ecef;
+    }
+    
+    .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
     }
     
     .stat-card h3 {
-        margin: 0 0 10px 0;
+        margin: 0 0 15px 0;
         color: #555;
+        font-size: 1.1rem;
+        font-weight: 600;
     }
     
     .stat-value {
-        font-size: 2.5em;
+        font-size: 2.8em;
         font-weight: bold;
         color: #2c3e50;
-        margin: 10px 0;
+        margin: 15px 0;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
     }
     
     .stat-link {
@@ -66,51 +76,123 @@
         color: #3498db;
         text-decoration: none;
         font-weight: bold;
+        padding: 8px 16px;
+        border-radius: 4px;
+        background: #f8f9fa;
+        transition: background 0.3s;
+    }
+    
+    .stat-link:hover {
+        background: #e9ecef;
+        text-decoration: none;
     }
     
     .quick-actions {
         margin: 40px 0;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .quick-actions h3 {
+        margin: 0 0 20px 0;
+        color: #2c3e50;
+        font-size: 1.3rem;
     }
     
     .actions-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
         gap: 15px;
-        margin-top: 20px;
     }
     
     .action-btn {
-        background: #3498db;
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
         color: white;
-        padding: 20px;
+        padding: 25px 15px;
         border-radius: 8px;
         text-decoration: none;
         text-align: center;
-        transition: transform 0.2s;
+        transition: all 0.3s;
         display: flex;
         flex-direction: column;
         align-items: center;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(52, 152, 219, 0.3);
     }
     
     .action-btn:hover {
-        transform: translateY(-2px);
-        background: #2980b9;
+        transform: translateY(-5px);
+        background: linear-gradient(135deg, #2980b9 0%, #1f6391 100%);
+        box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        text-decoration: none;
+        color: white;
     }
     
     .action-btn span:first-child {
-        font-size: 2em;
-        margin-bottom: 10px;
+        font-size: 2.5em;
+        margin-bottom: 15px;
+        opacity: 0.9;
+    }
+    
+    .action-btn span:last-child {
+        font-size: 1rem;
+        font-weight: 500;
     }
     
     .recent-activity {
         margin-top: 40px;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    .recent-activity h3 {
+        margin: 0 0 20px 0;
+        color: #2c3e50;
+        font-size: 1.3rem;
     }
     
     .activity-list {
-        background: white;
         padding: 20px;
+        background: #f8f9fa;
         border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        min-height: 200px;
+        min-height: 150px;
+        border: 1px solid #e9ecef;
+    }
+    
+    .activity-list p {
+        margin: 10px 0;
+        color: #495057;
+        font-size: 1.1rem;
+    }
+    
+    .activity-list strong {
+        color: #2c3e50;
+    }
+    
+    /* Адаптивность */
+    @media (max-width: 768px) {
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .stat-value {
+            font-size: 2.2em;
+        }
+        
+        .actions-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>

@@ -2,48 +2,46 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 
+// Главная страница
 router.get('/', async (req, res) => {
     try {
+        // Получаем статистику
         const clientCountResult = await db.query('SELECT COUNT(*) as count FROM clients');
         const tourCountResult = await db.query('SELECT COUNT(*) as count FROM tours');
         const saleCountResult = await db.query('SELECT COUNT(*) as count FROM sales');
+        const countryCountResult = await db.query('SELECT COUNT(*) as count FROM countries');
         const totalRevenueResult = await db.query(`
-            SELECT SUM(t.price * s.seats) as total 
+            SELECT COALESCE(SUM(t.price * s.seats), 0) as total 
             FROM sales s 
             JOIN tours t ON s.tourID = t.ID 
             WHERE s.status = 'completed'
         `);
 
-        const clientCount = clientCountResult[0] ? clientCountResult[0].count : 0;
-        const tourCount = tourCountResult[0] ? tourCountResult[0].count : 0;
-        const saleCount = saleCountResult[0] ? saleCountResult[0].count : 0;
-        const totalRevenue = totalRevenueResult[0] ? totalRevenueResult[0].total : 0;
+        // Извлекаем значения
+        const stats = {
+            clients: clientCountResult[0]?.count || 0,
+            tours: tourCountResult[0]?.count || 0,
+            sales: saleCountResult[0]?.count || 0,
+            countries: countryCountResult[0]?.count || 0,
+            revenue: totalRevenueResult[0]?.total || 0
+        };
 
-        console.log('Статистика:', {
-            clients: clientCount,
-            tours: tourCount,
-            sales: saleCount,
-            revenue: totalRevenue
-        });
+        console.log('Статистика:', stats);
 
         res.render('home', {
             title: 'Главная',
-            stats: {
-                clients: clientCount,
-                tours: tourCount,
-                sales: saleCount,
-                revenue: totalRevenue
-            }
+            stats: stats
         });
     } catch (error) {
         console.error('Ошибка при получении статистики:', error);
         res.render('home', {
             title: 'Главная',
-            stats: { clients: 0, tours: 0, sales: 0, revenue: 0 }
+            stats: { clients: 0, tours: 0, sales: 0, countries: 0, revenue: 0 }
         });
     }
 });
 
+// Подключаем остальные роуты
 router.use('/clients', require('./clients'));
 router.use('/countries', require('./countries'));
 router.use('/tours', require('./tours'));
