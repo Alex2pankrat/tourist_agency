@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 
-// Список всех туров
 router.get('/', async (req, res) => {
     try {
         const tours = await db.query('SELECT * FROM tours ORDER BY Name');
@@ -16,7 +15,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Добавление нового тура
 router.post('/', async (req, res) => {
     try {
         const { Name, tourType, description, price, seatsAvailable } = req.body;
@@ -34,7 +32,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Удаление тура
 router.post('/:id/delete', async (req, res) => {
     try {
         await db.query('DELETE FROM tours WHERE ID = ?', [req.params.id]);

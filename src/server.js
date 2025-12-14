@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
-// В настройках Handlebars добавьте хелперы:
+// Handlebars setup
 const hbs = exphbs.create({
     extname: '.hbs',
     defaultLayout: 'main',
@@ -21,18 +21,24 @@ const hbs = exphbs.create({
             return a == b ? opts.fn(this) : opts.inverse(this);
         },
         formatDate: function(date) {
+            if (!date) return '';
             return new Date(date).toLocaleDateString('ru-RU');
         },
         formatNumber: function(num) {
-            return num ? num.toLocaleString('ru-RU') : '0';
+            if (!num) return '0';
+            return num.toLocaleString('ru-RU');
         },
         multiply: function(a, b) {
+            if (!a || !b) return '0';
             return (a * b).toLocaleString('ru-RU');
         },
         calculateTotal: function(sales) {
+            if (!sales || !Array.isArray(sales)) return '0';
             let total = 0;
             sales.forEach(sale => {
-                total += sale.price * sale.seats;
+                if (sale.price && sale.seats) {
+                    total += sale.price * sale.seats;
+                }
             });
             return total.toLocaleString('ru-RU');
         },
@@ -83,6 +89,14 @@ const hbs = exphbs.create({
                 'Доминикана': '🇩🇴'
             };
             return flagEmojis[countryName] || '🌍';
+        },
+        stringify: function(obj) {
+            if (!obj) return '{}';
+            try {
+                return JSON.stringify(obj, null, 2);
+            } catch (e) {
+                return '{}';
+            }
         }
     }
 });
@@ -97,46 +111,6 @@ const db = require('./config/database');
 // Подключаем роуты
 const routes = require('./routes');
 app.use('/', routes);
-
-// После настройки роутов добавьте:
-app.use((req, res, next) => {
-    res.status(404).send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>404 - Страница не найдена</title>
-            <link rel="stylesheet" href="/css/style.css">
-        </head>
-        <body>
-            <div style="text-align: center; padding: 50px;">
-                <h1>404 - Страница не найдена</h1>
-                <p>Запрашиваемая страница не существует.</p>
-                <a href="/" style="color: #3498db;">Вернуться на главную</a>
-            </div>
-        </body>
-        </html>
-    `);
-});
-
-app.use((err, req, res, next) => {
-    console.error('Ошибка сервера:', err);
-    res.status(500).send(`
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>500 - Ошибка сервера</title>
-            <link rel="stylesheet" href="/css/style.css">
-        </head>
-        <body>
-            <div style="text-align: center; padding: 50px;">
-                <h1>500 - Ошибка сервера</h1>
-                <p>${err.message}</p>
-                <a href="/" style="color: #3498db;">Вернуться на главную</a>
-            </div>
-        </body>
-        </html>
-    `);
-});
 
 // Запуск сервера
 async function startServer() {

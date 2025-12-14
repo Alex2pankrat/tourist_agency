@@ -1,7 +1,16 @@
 <div class="crud-section">
     <h2>Редактирование клиента #{{client.ID}}</h2>
     
-    <form method="POST" action="/clients/{{client.ID}}/update"> <!-- Вот эта строка! -->
+    <!-- Добавьте отладку данных -->
+    <div style="background: #f0f0f0; padding: 10px; margin-bottom: 20px; display: none;" id="debugInfo">
+        <strong>Отладка:</strong>
+        <pre>{{stringify client}}</pre>
+        <p>ID: {{client.ID}}</p>
+        <p>FirstName: {{client.FirstName}}</p>
+        <p>LastName: {{client.LastName}}</p>
+    </div>
+    
+    <form method="POST" action="/clients/{{client.ID}}/update">
         <div class="form-grid">
             <div class="form-group">
                 <label for="FirstName">Имя *</label>
@@ -39,3 +48,39 @@
         </div>
     </div>
 </div>
+
+<script>
+// Показываем отладочную информацию при нажатии Ctrl+Shift+D
+document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+        e.preventDefault();
+        const debugDiv = document.getElementById('debugInfo');
+        debugDiv.style.display = debugDiv.style.display === 'none' ? 'block' : 'none';
+    }
+});
+
+// Авто-проверка данных при загрузке
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Данные клиента:', {
+        id: '{{client.ID}}',
+        firstName: '{{client.FirstName}}',
+        lastName: '{{client.LastName}}'
+    });
+    
+    // Проверяем, заполнены ли поля формы
+    const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
+    inputs.forEach(input => {
+        console.log(`${input.id}: ${input.value}`);
+    });
+});
+</script>
+
+<style>
+#debugInfo pre {
+    background: white;
+    padding: 10px;
+    border-radius: 5px;
+    overflow: auto;
+    max-height: 200px;
+}
+</style>
