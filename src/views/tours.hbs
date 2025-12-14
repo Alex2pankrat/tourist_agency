@@ -75,10 +75,11 @@
                 </div>
                 <div class="tour-footer">
                     <div class="tour-actions">
+                        <a href="/tours/{{this.ID}}/edit" class="btn btn-sm btn-primary">✏️ Редактировать</a>
                         <form method="POST" action="/tours/{{this.ID}}/delete" class="inline-form">
                             <button type="submit" class="btn btn-sm btn-danger" 
                                     onclick="return confirm('Удалить тур \"{{this.Name}}\"?')">
-                                Удалить
+                                🗑️ Удалить
                             </button>
                         </form>
                     </div>
@@ -224,11 +225,46 @@ function hideAddForm() {
 .tour-actions {
     display: flex;
     gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.tour-actions .btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-sm.btn-primary {
+    background: #3498db;
+    color: white;
+}
+
+.btn-sm.btn-primary:hover {
+    background: #2980b9;
+    transform: translateY(-1px);
+}
+
+.btn-sm.btn-danger {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-sm.btn-danger:hover {
+    background: #c0392b;
+    transform: translateY(-1px);
 }
 
 .tour-date {
     font-size: 0.8rem;
     color: #6c757d;
+}
+
+.inline-form {
+    display: inline;
 }
 
 .form-group select {

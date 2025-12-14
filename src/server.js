@@ -17,6 +17,9 @@ const hbs = exphbs.create({
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, 'views/layouts'),
     helpers: {
+        gt: function(a, b) {
+            return a > b;
+        },
         if_eq: function(a, b, opts) {
             return a == b ? opts.fn(this) : opts.inverse(this);
         },

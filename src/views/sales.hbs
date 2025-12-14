@@ -207,6 +207,21 @@ Handlebars.registerHelper('calculateTotal', function(sales) {
     });
     return total.toLocaleString();
 });
+
+console.log('Данные туров:', {
+    tours: {{{stringify tours}}},
+    count: {{tours.length}}
+});
+
+// Проверяем, что туры загружены
+document.addEventListener('DOMContentLoaded', function() {
+    const tourSelect = document.getElementById('tourID');
+    console.log('Туров в select:', tourSelect ? tourSelect.options.length : 0);
+    
+    if (tourSelect && tourSelect.options.length <= 1) {
+        console.warn('Нет доступных туров!');
+    }
+});
 </script>
 
 <style>

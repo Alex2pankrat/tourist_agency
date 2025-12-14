@@ -1,0 +1,299 @@
+<div class="crud-section">
+    <h2>Редактирование тура #{{tour.ID}}</h2>
+    
+    <form method="POST" action="/tours/{{tour.ID}}/update">
+        <div class="form-grid">
+            <div class="form-group">
+                <label for="Name">Название тура *</label>
+                <input type="text" id="Name" name="Name" value="{{tour.Name}}" required 
+                       placeholder="Название тура">
+            </div>
+            
+            <div class="form-group">
+                <label for="tourType">Тип тура *</label>
+                <select id="tourType" name="tourType" required>
+                    <option value="">Выберите тип</option>
+                    <option value="1" {{#if_eq tour.tourType 1}}selected{{/if_eq}}>🏖️ Пляжный</option>
+                    <option value="2" {{#if_eq tour.tourType 2}}selected{{/if_eq}}>⛰️ Горный</option>
+                    <option value="3" {{#if_eq tour.tourType 3}}selected{{/if_eq}}>🩺 Лечебный</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="price">Цена (₽) *</label>
+                <input type="number" id="price" name="price" step="0.01" min="0" 
+                       value="{{tour.price}}" required placeholder="0.00">
+            </div>
+            
+            <div class="form-group">
+                <label for="seatsAvailable">Доступно мест *</label>
+                <input type="number" id="seatsAvailable" name="seatsAvailable" min="0" 
+                       value="{{tour.seatsAvailable}}" required placeholder="10">
+            </div>
+            
+            <div class="form-group full-width">
+                <label for="description">Описание *</label>
+                <textarea id="description" name="description" rows="6" required 
+                          placeholder="Подробное описание тура...">{{tour.description}}</textarea>
+            </div>
+        </div>
+        
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">💾 Сохранить изменения</button>
+            <a href="/tours" class="btn btn-secondary">← Назад к списку</a>
+        </div>
+    </form>
+    
+    <div class="tour-info mt-3">
+        <h4>Информация о туре</h4>
+        <div class="info-grid">
+            <div class="info-item">
+                <strong>ID тура:</strong> {{tour.ID}}
+            </div>
+            <div class="info-item">
+                <strong>Тип тура:</strong>
+                <span class="tour-type-display type-{{tour.tourType}}">
+                    {{#if_eq tour.tourType 1}}🏖️ Пляжный{{/if_eq}}
+                    {{#if_eq tour.tourType 2}}⛰️ Горный{{/if_eq}}
+                    {{#if_eq tour.tourType 3}}🩺 Лечебный{{/if_eq}}
+                </span>
+            </div>
+            <div class="info-item">
+                <strong>Дата создания:</strong> {{formatDate tour.CreatedAt}}
+            </div>
+            <div class="info-item">
+                <strong>Статус:</strong> 
+                <span class="status-badge {{#if (gt tour.seatsAvailable 0)}}active{{else}}inactive{{/if}}">
+                    {{#if (gt tour.seatsAvailable 0)}}✅ Активен{{else}}⛔ Завершен{{/if}}
+                </span>
+            </div>
+        </div>
+        
+        <div class="sales-info mt-2">
+            <h5>Статистика продаж:</h5>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-label">Всего продано мест:</span>
+                    <span class="stat-value">{{#if tour.totalSales}}{{tour.totalSales}}{{else}}0{{/if}}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Общая выручка:</span>
+                    <span class="stat-value">{{#if tour.totalRevenue}}{{tour.totalRevenue}} ₽{{else}}0 ₽{{/if}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Подсчет символов в описании
+const descriptionTextarea = document.getElementById('description');
+if (descriptionTextarea) {
+    const charCount = document.createElement('div');
+    charCount.className = 'char-count';
+    charCount.style.fontSize = '0.85rem';
+    charCount.style.color = '#6c757d';
+    charCount.style.marginTop = '0.5rem';
+    descriptionTextarea.parentNode.appendChild(charCount);
+    
+    function updateCharCount() {
+        const length = descriptionTextarea.value.length;
+        charCount.textContent = `${length} символов`;
+        
+        if (length < 50) {
+            charCount.style.color = '#dc3545';
+        } else if (length < 100) {
+            charCount.style.color = '#ffc107';
+        } else {
+            charCount.style.color = '#28a745';
+        }
+    }
+    
+    descriptionTextarea.addEventListener('input', updateCharCount);
+    updateCharCount();
+}
+</script>
+
+<style>
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #495057;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 150px;
+    font-family: inherit;
+    line-height: 1.5;
+}
+
+.tour-info {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+    margin-top: 2rem;
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.info-item {
+    padding: 0.75rem;
+    background: white;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+}
+
+.info-item strong {
+    color: #495057;
+    display: block;
+    margin-bottom: 0.25rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.tour-type-display {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.type-1 { background: #ffeaa7; color: #d35400; }
+.type-2 { background: #dfe6e9; color: #2c3e50; }
+.type-3 { background: #a3e4d7; color: #0d6251; }
+
+.status-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.status-badge.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-badge.inactive {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.sales-info {
+    background: white;
+    padding: 1rem;
+    border-radius: 5px;
+    border: 1px solid #dee2e6;
+}
+
+.sales-info h5 {
+    margin: 0 0 1rem 0;
+    color: #495057;
+    font-size: 1rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.stat-item {
+    padding: 0.75rem;
+    background: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+}
+
+.stat-label {
+    display: block;
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}
+
+.stat-value {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+}
+</style>
