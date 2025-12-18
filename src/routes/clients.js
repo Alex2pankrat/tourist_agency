@@ -46,10 +46,8 @@ router.get('/:id/edit', async (req, res) => {
         const clientId = req.params.id;
         console.log('Получение клиента для редактирования, ID:', clientId);
         
-        // Выполняем запрос
         const result = await db.query('SELECT * FROM clients WHERE ID = ?', [clientId]);
         
-        // Добавляем отладку
         console.log('Результат запроса:', result);
         console.log('Длина результата:', result.length);
         
@@ -58,12 +56,12 @@ router.get('/:id/edit', async (req, res) => {
             return res.status(404).send('Клиент не найден');
         }
         
-        const client = result[0]; // Берем первую запись
+        const client = result[0];
         console.log('Данные клиента:', client);
         
         res.render('client_edit', {
             title: 'Редактирование клиента',
-            client: client // передаем объект клиента
+            client: client
         });
     } catch (error) {
         console.error('Ошибка загрузки клиента:', error);
@@ -71,7 +69,6 @@ router.get('/:id/edit', async (req, res) => {
     }
 });
 
-// Обновление клиента
 router.post('/:id/update', async (req, res) => {
     try {
         const clientId = req.params.id;

@@ -2,10 +2,8 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 
-// Главная страница
 router.get('/', async (req, res) => {
     try {
-        // Получаем статистику
         const clientCountResult = await db.query('SELECT COUNT(*) as count FROM clients');
         const tourCountResult = await db.query('SELECT COUNT(*) as count FROM tours');
         const saleCountResult = await db.query('SELECT COUNT(*) as count FROM sales');
@@ -17,7 +15,6 @@ router.get('/', async (req, res) => {
             WHERE s.status = 'completed'
         `);
 
-        // Извлекаем значения
         const stats = {
             clients: clientCountResult[0]?.count || 0,
             tours: tourCountResult[0]?.count || 0,
@@ -41,7 +38,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Подключаем остальные роуты
 router.use('/clients', require('./clients'));
 router.use('/countries', require('./countries'));
 router.use('/tours', require('./tours'));

@@ -6,7 +6,6 @@
         </div>
     </div>
 
-    <!-- Форма добавления -->
     <div id="addForm" class="form-section" style="display: none;">
         <h3>Оформление новой продажи</h3>
         <form method="POST" action="/sales">
@@ -46,7 +45,6 @@
                 </div>
             </div>
             
-            <!-- Информация о туре -->
             <div id="tourInfo" class="tour-info" style="display: none;">
                 <h4>Информация о туре</h4>
                 <div class="info-grid">
@@ -69,7 +67,6 @@
         </form>
     </div>
 
-    <!-- Список продаж -->
     <div class="data-section">
         <h3>История продаж</h3>
         {{#if sales.length}}
@@ -186,7 +183,6 @@ function calculateTotal() {
     
     document.getElementById('totalCost').textContent = total.toLocaleString();
     
-    // Валидация количества мест
     const seatsInput = document.getElementById('seats');
     if (seats > selectedTourSeats) {
         seatsInput.setCustomValidity(`Недостаточно мест. Доступно: ${selectedTourSeats}`);
@@ -195,7 +191,6 @@ function calculateTotal() {
     }
 }
 
-// Хелпер для Handlebars (добавить в server.js)
 Handlebars.registerHelper('multiply', function(price, seats) {
     return (price * seats).toLocaleString();
 });
@@ -213,7 +208,6 @@ console.log('Данные туров:', {
     count: {{tours.length}}
 });
 
-// Проверяем, что туры загружены
 document.addEventListener('DOMContentLoaded', function() {
     const tourSelect = document.getElementById('tourID');
     console.log('Туров в select:', tourSelect ? tourSelect.options.length : 0);

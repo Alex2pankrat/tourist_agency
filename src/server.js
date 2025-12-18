@@ -6,12 +6,10 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
-// Handlebars setup
 const hbs = exphbs.create({
     extname: '.hbs',
     defaultLayout: 'main',
@@ -138,31 +136,21 @@ app.engine('hbs', hbs.engine);
 app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Подключаем базу данных
 const db = require('./config/database');
 
-// Подключаем роуты
 const routes = require('./routes');
 app.use('/', routes);
 
-// Запуск сервера
 async function startServer() {
     try {
-        // Подключаемся к базе данных
         await db.connect();
-        console.log('✅ Подключение к базе данных установлено');
+        console.log('✅ db');
 
         app.listen(PORT, () => {
-            console.log(`🚀 Сервер запущен на http://localhost:${PORT}`);
-            console.log('📋 Доступные страницы:');
-            console.log(`   http://localhost:${PORT}/ - Главная`);
-            console.log(`   http://localhost:${PORT}/clients - Клиенты`);
-            console.log(`   http://localhost:${PORT}/countries - Страны`);
-            console.log(`   http://localhost:${PORT}/tours - Туры`);
-            console.log(`   http://localhost:${PORT}/sales - Продажи`);
+            console.log(`http://localhost:${PORT}`);
         });
     } catch (error) {
-        console.error('❌ Не удалось запустить сервер:', error);
+        console.error('❌', error);
         process.exit(1);
     }
 }

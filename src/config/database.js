@@ -18,17 +18,12 @@ class Database {
                 queueLimit: 0
             });
 
-            // Проверяем подключение
             const connection = await this.pool.getConnection();
-            console.log(`✅ База данных: ${process.env.DB_NAME || 'tour_agency'}`);
+            console.log(`✅ db ${process.env.DB_NAME || 'tour_agency'}`);
             connection.release();
             return true;
         } catch (error) {
-            console.error('❌ Ошибка подключения к базе данных:', error.message);
-            console.log('Проверьте:');
-            console.log('1. Запущен ли MySQL сервер');
-            console.log('2. Правильные ли данные в .env файле');
-            console.log('3. Существует ли база данных tour_agency');
+            console.error('❌ db', error.message);
             throw error;
         }
     }
@@ -38,7 +33,7 @@ class Database {
             const [rows] = await this.pool.execute(sql, params);
             return rows;
         } catch (error) {
-            console.error('❌ Database query error:', error.message);
+            console.error('❌ db', error.message);
             console.error('SQL:', sql);
             console.error('Params:', params);
             throw error;

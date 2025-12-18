@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 
-// Список всех продаж
 router.get('/', async (req, res) => {
     try {
         const sales = await db.query(`
@@ -30,14 +29,12 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Добавление новой продажи - ИСПРАВЛЕНО!
 router.post('/', async (req, res) => {
     try {
         const { clientID, tourID, seats, status } = req.body;
         
         console.log('Добавление продажи:', { clientID, tourID, seats, status });
         
-        // Проверка обязательных полей
         if (!clientID || !tourID || !seats) {
             throw new Error('Не все обязательные поля заполнены');
         }
@@ -47,7 +44,6 @@ router.post('/', async (req, res) => {
             throw new Error('Количество мест должно быть больше 0');
         }
         
-        // Проверяем доступность мест - БЕЗ ДЕСТРУКТУРИЗАЦИИ
         const tourResult = await db.query('SELECT seatsAvailable FROM tours WHERE ID = ?', [tourID]);
         
         console.log('Результат запроса тура:', tourResult);
@@ -64,13 +60,11 @@ router.post('/', async (req, res) => {
             throw new Error(`Недостаточно мест. Доступно: ${tour.seatsAvailable}`);
         }
         
-        // Добавляем продажу
         await db.query(
             'INSERT INTO sales (clientID, tourID, seats, status) VALUES (?, ?, ?, ?)',
             [clientID, tourID, seatsNum, status || 'pending']
         );
         
-        // Обновляем доступные места
         await db.query(
             'UPDATE tours SET seatsAvailable = seatsAvailable - ? WHERE ID = ?',
             [seatsNum, tourID]
@@ -82,7 +76,6 @@ router.post('/', async (req, res) => {
     } catch (error) {
         console.error('Ошибка добавления продажи:', error.message);
         
-        // Получаем данные для формы, чтобы не потерять их
         try {
             const clients = await db.query('SELECT ID, FirstName, LastName FROM clients ORDER BY LastName');
             const tours = await db.query('SELECT ID, Name, price, seatsAvailable FROM tours ORDER BY Name');
@@ -96,14 +89,13 @@ router.post('/', async (req, res) => {
                 ORDER BY s.CreatedAt DESC
             `);
             
-            // Рендерим страницу продаж с сообщением об ошибке
             res.render('sales', {
                 title: 'Продажи',
                 sales: sales,
                 clients: clients,
                 tours: tours,
                 error: error.message,
-                formData: req.body // сохраняем введенные данные
+                formData: req.body
             });
         } catch (err) {
             console.error('Ошибка при восстановлении данных:', err);
@@ -112,7 +104,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Обновление статуса продажи
 router.post('/:id/status', async (req, res) => {
     try {
         const { status } = req.body;
@@ -133,10 +124,8 @@ router.post('/:id/status', async (req, res) => {
     }
 });
 
-// Удаление продажи - ИСПРАВЛЕНО!
 router.post('/:id/delete', async (req, res) => {
     try {
-        // Возвращаем места обратно в тур - БЕЗ ДЕСТРУКТУРИЗАЦИИ
         const saleResult = await db.query('SELECT tourID, seats FROM sales WHERE ID = ?', [req.params.id]);
         
         console.log('Результат запроса продажи для удаления:', saleResult);

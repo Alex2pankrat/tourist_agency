@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 
-// Список всех стран
 router.get('/', async (req, res) => {
     try {
         const countries = await db.query('SELECT * FROM countries ORDER BY Name');
@@ -16,7 +15,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Добавление новой страны
 router.post('/', async (req, res) => {
     try {
         const { Name, Visa } = req.body;
@@ -34,7 +32,6 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Удаление страны
 router.post('/:id/delete', async (req, res) => {
     try {
         await db.query('DELETE FROM countries WHERE ID = ?', [req.params.id]);
@@ -45,7 +42,6 @@ router.post('/:id/delete', async (req, res) => {
     }
 });
 
-// Форма редактирования страны
 router.get('/:id/edit', async (req, res) => {
     try {
         const countryId = req.params.id;
@@ -65,7 +61,6 @@ router.get('/:id/edit', async (req, res) => {
     }
 });
 
-// Обновление страны
 router.post('/:id/update', async (req, res) => {
     try {
         const countryId = req.params.id;

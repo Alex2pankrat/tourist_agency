@@ -1,4 +1,3 @@
-/* Основные стили */
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +14,6 @@ body {
     flex-direction: column;
 }
 
-/* Навигация */
 header {
     background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
     color: white;
@@ -61,7 +59,6 @@ header {
     font-weight: bold;
 }
 
-/* Основной контент */
 .container {
     max-width: 1200px;
     margin: 2rem auto;
@@ -70,7 +67,6 @@ header {
     width: 100%;
 }
 
-/* Формы и таблицы */
 .crud-section {
     background: white;
     padding: 2rem;
@@ -86,7 +82,6 @@ header {
     border-bottom: 2px solid #3498db;
 }
 
-/* Формы */
 form {
     border-radius: 8px;
     margin-bottom: 2rem;
@@ -138,7 +133,6 @@ form button:hover {
     box-shadow: 0 4px 8px rgba(52, 152, 219, 0.3);
 }
 
-/* Таблицы */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -169,7 +163,6 @@ table tbody tr:hover {
     background: #f8f9fa;
 }
 
-/* Кнопки действий */
 .btn {
     display: inline-block;
     padding: 0.5rem 1rem;
@@ -214,7 +207,6 @@ table tbody tr:hover {
     font-size: 0.8rem;
 }
 
-/* Форма редактирования */
 .form-group {
     margin-bottom: 1rem;
 }
@@ -236,7 +228,6 @@ table tbody tr:hover {
     font-size: 1rem;
 }
 
-/* Footer */
 footer {
     background: #2c3e50;
     color: white;
@@ -250,7 +241,6 @@ footer p {
     opacity: 0.8;
 }
 
-/* Алерты */
 .alert {
     padding: 1rem;
     border-radius: 4px;
@@ -276,7 +266,6 @@ footer p {
     color: #856404;
 }
 
-/* Мобильная адаптация */
 @media (max-width: 768px) {
     .navbar {
         flex-direction: column;
@@ -303,7 +292,6 @@ footer p {
     }
 }
 
-/* Утилиты */
 .text-center {
     text-align: center;
 }
@@ -315,13 +303,11 @@ footer p {
 .mb-2 { margin-bottom: 2rem; }
 .mb-3 { margin-bottom: 3rem; }
 
-/* Стили для статусов */
 .status-pending { color: #f39c12; font-weight: bold; }
 .status-confirmed { color: #27ae60; font-weight: bold; }
 .status-cancelled { color: #e74c3c; font-weight: bold; }
 .status-completed { color: #3498db; font-weight: bold; }
 
-/* Стили для туров */
 .tour-type-1 { color: #e67e22; }
 .tour-type-2 { color: #34495e; }
 .tour-type-3 { color: #16a085; }

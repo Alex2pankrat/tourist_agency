@@ -1,7 +1,6 @@
 CREATE DATABASE IF NOT EXISTS tour_agency;
 USE tour_agency;
 
--- Создание таблицы clients
 CREATE TABLE IF NOT EXISTS clients (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     FirstName VARCHAR(50) NOT NULL,
@@ -11,7 +10,6 @@ CREATE TABLE IF NOT EXISTS clients (
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Создание таблицы countries
 CREATE TABLE IF NOT EXISTS countries (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(100) NOT NULL UNIQUE,
@@ -19,7 +17,6 @@ CREATE TABLE IF NOT EXISTS countries (
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Создание таблицы tours
 CREATE TABLE IF NOT EXISTS tours (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     Name VARCHAR(200) NOT NULL,
@@ -30,7 +27,6 @@ CREATE TABLE IF NOT EXISTS tours (
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Создание таблицы sales
 CREATE TABLE IF NOT EXISTS sales (
     ID INT AUTO_INCREMENT PRIMARY KEY,
     clientID INT NOT NULL,
@@ -42,7 +38,6 @@ CREATE TABLE IF NOT EXISTS sales (
     FOREIGN KEY (tourID) REFERENCES tours(ID) ON DELETE CASCADE
 );
 
--- Добавление индексов для улучшения производительности
 CREATE INDEX idx_clients_email ON clients(Email);
 CREATE INDEX idx_sales_client ON sales(clientID);
 CREATE INDEX idx_sales_tour ON sales(tourID);

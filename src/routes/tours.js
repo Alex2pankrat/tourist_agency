@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 
-// Список всех туров
 router.get('/', async (req, res) => {
     try {
         const tours = await db.query('SELECT * FROM tours');
@@ -16,7 +15,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Добавление нового тура
 router.post('/', async (req, res) => {
     try {
         const { Name, tourType, description, price, seatsAvailable } = req.body;
@@ -34,12 +32,10 @@ router.post('/', async (req, res) => {
     }
 });
 
-// Удаление тура - ИСПРАВЛЕНО!
 router.post('/:id/delete', async (req, res) => {
     try {
         const tourId = req.params.id;
         
-        // Проверяем, есть ли связанные продажи - БЕЗ ДЕСТРУКТУРИЗАЦИИ
         const salesResult = await db.query('SELECT COUNT(*) as count FROM sales WHERE tourID = ?', [tourId]);
         
         console.log('Результат проверки продаж:', salesResult);
@@ -65,7 +61,6 @@ router.post('/:id/delete', async (req, res) => {
             `);
         }
         
-        // Если связанных продаж нет, удаляем тур
         await db.query('DELETE FROM tours WHERE ID = ?', [tourId]);
         console.log('Тур успешно удален, ID:', tourId);
         res.redirect('/tours');
@@ -82,7 +77,6 @@ router.post('/:id/delete', async (req, res) => {
     }
 });
 
-// Форма редактирования тура
 router.get('/:id/edit', async (req, res) => {
     try {
         const tourId = req.params.id;
@@ -102,13 +96,11 @@ router.get('/:id/edit', async (req, res) => {
     }
 });
 
-// Обновление тура
 router.post('/:id/update', async (req, res) => {
     try {
         const tourId = req.params.id;
         const { Name, tourType, description, price, seatsAvailable } = req.body;
         
-        // Валидация данных
         if (!Name || !tourType || !description || !price || !seatsAvailable) {
             throw new Error('Все поля обязательны для заполнения');
         }

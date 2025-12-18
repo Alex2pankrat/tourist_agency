@@ -1,7 +1,6 @@
 <div class="crud-section">
     <h2>Редактирование клиента #{{client.ID}}</h2>
     
-    <!-- Добавьте отладку данных -->
     <div style="background: #f0f0f0; padding: 10px; margin-bottom: 20px; display: none;" id="debugInfo">
         <strong>Отладка:</strong>
         <pre>{{stringify client}}</pre>
@@ -50,7 +49,7 @@
 </div>
 
 <script>
-// Показываем отладочную информацию при нажатии Ctrl+Shift+D
+
 document.addEventListener('keydown', function(e) {
     if (e.ctrlKey && e.shiftKey && e.key === 'D') {
         e.preventDefault();
@@ -59,7 +58,6 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// Авто-проверка данных при загрузке
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Данные клиента:', {
         id: '{{client.ID}}',
@@ -67,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
         lastName: '{{client.LastName}}'
     });
     
-    // Проверяем, заполнены ли поля формы
     const inputs = document.querySelectorAll('input[type="text"], input[type="email"], input[type="tel"]');
     inputs.forEach(input => {
         console.log(`${input.id}: ${input.value}`);
